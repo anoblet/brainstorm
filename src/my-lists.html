@@ -1,0 +1,85 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+
+<dom-module id="my-lists">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+        </style>
+        <paper-listbox selected="{{listId}}">
+            <template is="dom-repeat" items="{{lists}}">
+                <paper-item>
+                    [[index]]
+                    <!--<paper-input value="{{item.label}}"></paper-input>-->
+                </paper-item>
+            </template>
+        </paper-listbox>
+        <paper-button on-click="_new">New</paper-button>
+        <!--<firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>-->
+        <firebase-document path="/users/[[userId]]/lists" data="{{data}}"></firebase-document>
+    </template>
+
+    <script>
+        class MyLists extends Polymer.Element {
+            static get is() {
+                return 'my-lists';
+            }
+
+            static get properties() {
+                return {
+                    data: {
+                        type: Object,
+                        observer: '_dataChanged'
+                    },
+                    lists: {
+                        type: Array,
+                        observer: '_listsChanged'
+                    },
+                    userId: {
+                        type: String
+                    },
+                    listId: {
+                        type: Number,
+                        notify: true
+                    }
+                }
+            }
+
+            _new() {
+                let length = this.lists.length;
+                this.push("lists", {});
+                this.listId = length;
+            }
+
+            _dataChanged(data) {
+                if(data.length) {
+                    this.lists = data;
+                }
+                console.log(data);
+            }
+
+            _listsChanged(lists) {
+                console.log("Here");
+                this.data = lists;
+            }
+        }
+
+        window.customElements.define(MyLists.is, MyLists);
+    </script>
+</dom-module>

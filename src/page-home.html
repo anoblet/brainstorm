@@ -10,34 +10,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="my-lists.html">
+<link rel="import" href="my-list.html">
 
-<dom-module id="my-view1">
+<dom-module id="page-home">
     <template>
         <style include="shared-styles">
             :host {
                 display: block;
+            }
 
-                padding: 10px;
+            paper-card {
+                margin: 1rem;
+                padding: 1rem;
+                width: 100%;
             }
         </style>
-
-        <div class="card">
-            <div class="circle">1</div>
-            <h1>View One</h1>
-            <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-            <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit
-                amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo
-                eripuit sit.</p>
-        </div>
+        <paper-card>
+            <my-lists user-id="[[userId]]" list-id="{{listId}}"></my-lists>
+        </paper-card>
+        <paper-card>
+            <my-list user-id="[[userId]]" id="{{listId}}"></my-list>
+        </paper-card>
     </template>
 
     <script>
-        class MyView1 extends Polymer.Element {
+        class PageHome extends Polymer.Element {
             static get is() {
-                return 'my-view1';
+                return 'page-home';
+            }
+
+            static get properties() {
+                return {
+                    userId: {
+                        type: String,
+                        value: 0
+                    }
+                }
             }
         }
 
-        window.customElements.define(MyView1.is, MyView1);
+        window.customElements.define(PageHome.is, PageHome);
     </script>
 </dom-module>
