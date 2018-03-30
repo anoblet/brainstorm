@@ -26,44 +26,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     display: block;
                 }
 
+                paper-card {
+                    width: 100%;
+                }
+
                 paper-item {
                     display: grid;
                     grid-template-columns: auto max-content;
                 }
             </style>
-            <paper-card>
+            <paper-card heading="My Storms">
                 <paper-listbox selected="{{listId}}">
                     <template is="dom-repeat" items="{{lists}}">
                         <paper-item>
                             <div class="label">
-                                [[index]]
+                                [[index]][[item.label]]
                             </div>
                             <div class="actions">
                                 <iron-icon icon="icons:create"></iron-icon>
                                 <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
                             </div>
                         </paper-item>
-                        </paper-item>
                     </template>
                 </paper-listbox>
-                <paper-button on-click="_new">New</paper-button>
+                <div class="card-actions">
+                    <paper-button on-click="_new">New</paper-button>
+                </div>
             </paper-card>
             <firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>
-        </template>
-        <template is="dom-if" if="[[_isEqual(version, 2)]]">
-            <style include="shared-styles">
-                :host {
-                    display: block;
-                }
-            </style>
-            <paper-listbox selected="{{listId}}">
-                <template is="dom-repeat" items="{{lists}}">
-                    <paper-item>[[item.label]]</paper-item>
-                    </paper-item>
-                </template>
-            </paper-listbox>
-            <paper-button on-click="_new">New</paper-button>
-            <firebase-document path="/users/[[userId]]/lists" data="{{lists}}"></firebase-document>
+            <firebase-document path="/users/[[userId]]/lists" data="{{document}}"></firebase-document>
         </template>
     </template>
     <script>
@@ -98,21 +89,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             static get observers() {
                 return [
-                    '_dataChanged(data.length)'
+                    // '_dataChanged(data.length)'
                 ]
             }
 
             _new() {
-                let length = this.lists.length;
-                console.log(this.data);
-                // this.push("lists", {});
+                let length = this.document.length;
+                if(!length) this.set("document", []);
+                this.push("document", {label: ""});
                 this.listId = length;
             }
 
             _delete(event) {
                 let id = event.target.getAttribute('data-id');
-                this.lists.splice(id, 1);
-                this.notifySplices("lists");
+                this.splice("document", id, 1);
+                // this.notifySplices("document");
                 console.log(id);
             }
 

@@ -26,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_addItem"></iron-a11y-keys>
+        <paper-input label="Name" value="{{data.label::input}}"></paper-input>
         <paper-input id="item" label="Write your idea here..." value="{{item::input}}"></paper-input>
         <paper-listbox>
             <template is="dom-repeat" items="{{data.items}}">
