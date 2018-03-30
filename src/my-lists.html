@@ -14,27 +14,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
 <dom-module id="my-lists">
     <template>
-        <style include="shared-styles">
-            :host {
-                display: block;
-            }
-        </style>
-        <paper-listbox selected="{{listId}}">
-            <template is="dom-repeat" items="{{lists}}">
-                <paper-item>
-                    [[index]]
-                    <!--<paper-input value="{{item.label}}"></paper-input>-->
-                </paper-item>
-            </template>
-        </paper-listbox>
-        <paper-button on-click="_new">New</paper-button>
-        <!--<firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>-->
-        <firebase-document path="/users/[[userId]]/lists" data="{{data}}"></firebase-document>
-    </template>
+        <template is="dom-if" if="[[_isEqual(version, 1)]]">
+            <style include="shared-styles">
+                :host {
+                    display: block;
+                }
 
+                paper-item {
+                    display: grid;
+                    grid-template-columns: auto max-content;
+                }
+            </style>
+            <paper-listbox selected="{{listId}}">
+                <template is="dom-repeat" items="{{lists}}">
+                    <paper-item>
+                        <div class="label">
+                            [[index]]
+                        </div>
+                        <div class="actions">
+                            <iron-icon icon="icons:create"></iron-icon>
+                            <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
+                        </div>
+                    </paper-item>
+                    </paper-item>
+                </template>
+            </paper-listbox>
+            <paper-button on-click="_new">New</paper-button>
+            <firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>
+        </template>
+        <template is="dom-if" if="[[_isEqual(version, 2)]]">
+            <style include="shared-styles">
+                :host {
+                    display: block;
+                }
+            </style>
+            <paper-listbox selected="{{listId}}">
+                <template is="dom-repeat" items="{{lists}}">
+                    <paper-item>[[item.label]]</paper-item>
+                    </paper-item>
+                </template>
+            </paper-listbox>
+            <paper-button on-click="_new">New</paper-button>
+            <firebase-document path="/users/[[userId]]/lists" data="{{lists}}"></firebase-document>
+        </template>
+    </template>
     <script>
         class MyLists extends Polymer.Element {
             static get is() {
@@ -45,11 +73,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return {
                     data: {
                         type: Object,
-                        observer: '_dataChanged'
                     },
                     lists: {
                         type: Array,
-                        observer: '_listsChanged'
+                        //observer: '_listsChanged'
+                        // computed: '_computeLists(data)'
                     },
                     userId: {
                         type: String
@@ -57,26 +85,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     listId: {
                         type: Number,
                         notify: true
+                    },
+                    version: {
+                        type: Number,
+                        value: 1
                     }
                 }
             }
 
+            static get observers() {
+                return [
+                    '_dataChanged(data.length)'
+                ]
+            }
+
             _new() {
                 let length = this.lists.length;
-                this.push("lists", {});
+                console.log(this.data);
+                // this.push("lists", {});
                 this.listId = length;
             }
 
+            _delete(event) {
+                let id = event.target.getAttribute('data-id');
+                this.lists.splice(id, 1);
+                this.notifySplices("lists");
+                console.log(id);
+            }
+
             _dataChanged(data) {
-                if(data.length) {
-                    this.lists = data;
-                }
                 console.log(data);
+                //if(this.data) {
+                this.set("lists", this.data);
+                //}
+            }
+
+            _computeLists(data) {
+                if(data) return data;
             }
 
             _listsChanged(lists) {
                 console.log("Here");
                 this.data = lists;
+            }
+
+            _isEqual(prop1, prop2) {
+                return prop1 === prop2;
             }
         }
 
