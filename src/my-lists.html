@@ -35,14 +35,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <paper-card heading="My Storms">
-            [[routeData.list]]
             <paper-listbox selected="{{listId}}">
                 <template is="dom-repeat" items="{{lists}}">
                     <paper-item>
-                        <div class="label">
-                            [[index]][[item.label]]
-                            <a href="/list/[[index]]">[[item.label]]</a>
-                        </div>
+                        <a href="/list/[[index]]">
+                            <div class="label">
+                                [[index]][[item.label]]
+                            </div>
+                        </a>
                         <div class="actions">
                             <iron-icon icon="icons:create"></iron-icon>
                             <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
