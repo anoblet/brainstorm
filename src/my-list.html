@@ -9,7 +9,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="shared-styles.html">
 <link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -18,14 +17,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 
+<link rel="import" href="my-styles.html">
+
 <dom-module id="my-list">
     <template>
-        <style include="shared-styles">
+        <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
+        <style include="my-styles">
             :host {
                 display: block;
             }
         </style>
         <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_addItem"></iron-a11y-keys>
+        [[id]]
         <paper-input label="Name" value="{{data.label::input}}"></paper-input>
         <paper-input id="item" label="Write your idea here..." value="{{item::input}}"></paper-input>
         <paper-listbox>
@@ -63,6 +66,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: Object,
                         // computed: '_computeData(id, items)'
                     },
+                    routeData: {
+                        type: Object,
+                        observer: '_routeDataChanged'
+                    },
                     userId: {
                         type: String,
                         value: "0"
@@ -72,6 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready() {
                 super.ready();
+
                 this.data.id = this.id;
                 this.data.label = this.label;
                 this.target = this.$.item;
@@ -82,9 +90,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             connectedCallback() {
                 super.connectedCallback();
+                this.id = this.routeData.id;
                 this.data.id = this.id;
                 this.data.label = this.label;
                 // this.target = this.shadowRoot.querySelector("paper-input");
+            }
+
+            _routeDataChanged(data) {
+                this.id = data.id;
             }
 
             _computeIndex(index) {

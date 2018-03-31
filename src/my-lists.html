@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
@@ -18,44 +18,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="my-styles.html">
+
 <dom-module id="my-lists">
     <template>
-        <template is="dom-if" if="[[_isEqual(version, 1)]]">
-            <style include="shared-styles">
-                :host {
-                    display: block;
-                }
+        <app-route route="{{route}}" pattern="/:list" data="{{routeData}}"></app-route>
+        <style include="my-styles"></style>
+        <style>
+            :host {
+                display: block;
+            }
 
-                paper-card {
-                    width: 100%;
-                }
-
-                paper-item {
-                    display: grid;
-                    grid-template-columns: auto max-content;
-                }
-            </style>
-            <paper-card heading="My Storms">
-                <paper-listbox selected="{{listId}}">
-                    <template is="dom-repeat" items="{{lists}}">
-                        <paper-item>
-                            <div class="label">
-                                [[index]][[item.label]]
-                            </div>
-                            <div class="actions">
-                                <iron-icon icon="icons:create"></iron-icon>
-                                <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
-                            </div>
-                        </paper-item>
-                    </template>
-                </paper-listbox>
-                <div class="card-actions">
-                    <paper-button on-click="_new">New</paper-button>
-                </div>
-            </paper-card>
-            <firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>
-            <firebase-document path="/users/[[userId]]/lists" data="{{document}}"></firebase-document>
-        </template>
+            paper-item {
+                display: grid;
+                grid-template-columns: auto max-content;
+            }
+        </style>
+        <paper-card heading="My Storms">
+            [[routeData.list]]
+            <paper-listbox selected="{{listId}}">
+                <template is="dom-repeat" items="{{lists}}">
+                    <paper-item>
+                        <div class="label">
+                            [[index]][[item.label]]
+                            <a href="/list/[[index]]">[[item.label]]</a>
+                        </div>
+                        <div class="actions">
+                            <iron-icon icon="icons:create"></iron-icon>
+                            <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
+                        </div>
+                    </paper-item>
+                </template>
+            </paper-listbox>
+            <div class="card-actions">
+                <paper-button on-click="_new">New</paper-button>
+            </div>
+        </paper-card>
+        <firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>
+        <firebase-document path="/users/[[userId]]/lists" data="{{document}}"></firebase-document>
     </template>
     <script>
         class MyLists extends Polymer.Element {
@@ -68,6 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     data: {
                         type: Object,
                     },
+                    list: {},
                     lists: {
                         type: Array,
                         //observer: '_listsChanged'
@@ -80,6 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: Number,
                         notify: true
                     },
+                    route: {},
                     version: {
                         type: Number,
                         value: 1
@@ -93,18 +95,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 ]
             }
 
+            _computeIndex(index) {
+                return index + 1;
+            }
+
             _new() {
-                let length = this.document.length;
-                if(!length) this.set("document", []);
-                this.push("document", {label: ""});
-                this.listId = length;
+
+                let length = this.lists.length;
+                if(length == undefined) length = 0;
+                window.history.pushState({}, null, '/list/' + length);
+                window.dispatchEvent(new CustomEvent('location-changed'));
             }
 
             _delete(event) {
                 let id = event.target.getAttribute('data-id');
                 this.splice("document", id, 1);
-                // this.notifySplices("document");
-                console.log(id);
+
+                console.log(typeof this.document);
+                if(typeof this.document === 'array') {
+                }
+                else {
+                    delete this.document.id;
+                }
+                console.log(this.document);
             }
 
             _dataChanged(data) {

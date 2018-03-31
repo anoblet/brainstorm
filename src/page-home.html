@@ -9,21 +9,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="shared-styles.html">
 <link rel="import" href="my-lists.html">
 <link rel="import" href="my-list.html">
 
+<link rel="import" href="my-styles.html">
+
 <dom-module id="page-home">
     <template>
-        <style include="shared-styles">
+        <style include="my-styles">
             :host {
                 display: block;
-            }
-
-            paper-card {
-                margin: 1rem;
                 padding: 1rem;
-                width: 100%;
             }
         </style>
         <my-lists user-id="[[userId]]" list-id="{{listId}}"></my-lists>
