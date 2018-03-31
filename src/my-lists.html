@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </paper-card>
         <firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>
-        <firebase-document path="/users/[[userId]]/lists" data="{{document}}"></firebase-document>
+        <firebase-document id="document" path="/users/[[userId]]/lists" data="{{document}}"></firebase-document>
     </template>
     <script>
         class MyLists extends Polymer.Element {
@@ -95,14 +95,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 ]
             }
 
+            ready() {
+                super.ready();
+                /*
+                    this.$.document.zeroValue = function() {
+                    return [];
+                }
+                */
+            }
+
             _computeIndex(index) {
                 return index + 1;
             }
 
             _new() {
-
                 let length = this.lists.length;
                 if(length == undefined) length = 0;
+                if(!Array.isArray(this.document)) this.set("document", []);
                 window.history.pushState({}, null, '/list/' + length);
                 window.dispatchEvent(new CustomEvent('location-changed'));
             }
@@ -110,14 +119,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _delete(event) {
                 let id = event.target.getAttribute('data-id');
                 this.splice("document", id, 1);
-
-                console.log(typeof this.document);
-                if(typeof this.document === 'array') {
-                }
-                else {
-                    delete this.document.id;
-                }
-                console.log(this.document);
             }
 
             _dataChanged(data) {
