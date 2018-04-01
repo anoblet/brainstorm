@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="my-list.html">
 
 <link rel="import" href="my-styles.html">
 
@@ -45,7 +46,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <paper-card heading="Storms">
             <div class="content">
-                <paper-listbox selected="{{listId}}">
+                <!--<paper-listbox selected="{{listId}}">-->
+                <paper-listbox>
                     <template is="dom-repeat" items="{{lists}}">
                         <paper-item>
                             <a href="/list/[[index]]">
@@ -66,6 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-card>
         <firebase-query id="query" path="/users/[[userId]]/lists" data="{{lists}}"></firebase-query>
         <firebase-document id="document" path="/users/[[userId]]/lists" data="{{document}}"></firebase-document>
+        <template is="dom-if" if="[[routeData.listId]]">
+            <my-list id="[[routeData.listId]]" user-id="[[userId]]"></my-list>
+        </template>
     </template>
     <script>
         class MyLists extends Polymer.Element {
@@ -86,9 +91,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     },
                     listId: {
                         type: Number,
+                        value: false
                     },
                     route: {},
                 }
+            }
+
+            static get observers() {
+                return [
+                    'routeDataChanged(routeData.listId)'
+                ]
             }
 
             _computeIndex(index) {
@@ -124,6 +136,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _isEqual(prop1, prop2) {
                 return prop1 === prop2;
+            }
+
+            routeDataChanged(data) {
+                console.log(data);
             }
         }
 
