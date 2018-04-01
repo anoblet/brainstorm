@@ -28,14 +28,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_addItem"></iron-a11y-keys>
-        [[id]]
-        <paper-input label="Name" value="{{data.label::input}}"></paper-input>
-        <paper-input id="item" label="Write your idea here..." value="{{item::input}}"></paper-input>
-        <paper-listbox>
-            <template is="dom-repeat" items="{{data.items}}">
-                <paper-item>[[_computeIndex(index)]]. [[item]]</paper-item>
-            </template>
-        </paper-listbox>
+        <paper-card>
+            <div class="header">
+                <div class="title-text">
+                    <!--<paper-input label="Name" value="{{data.label::input}}"></paper-input>-->
+                </div>
+            </div>
+            <div class="content">
+                <paper-input id="item" label="Write your ideas here..." value="{{item::input}}"></paper-input>
+                <paper-listbox>
+                    <template is="dom-repeat" items="{{data.items}}">
+                        <paper-item>[[_computeIndex(index)]]. [[item]]</paper-item>
+                    </template>
+                </paper-listbox>
+            </div>
+        </paper-card>
         <firebase-document path="/users/[[userId]]/lists/[[id]]" data="{{data}}"></firebase-document>
     </template>
 

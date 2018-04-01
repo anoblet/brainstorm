@@ -22,12 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
 <link rel="lazy-import" href="my-list.html">
 <link rel="lazy-import" href="my-lists.html">
-<link rel="lazy-import" href="my-view404.html">
 
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
@@ -71,6 +67,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: black;
                 font-weight: bold;
             }
+
+            [main-title] {
+                pointer-events: initial;
+            }
+
+            [main-title] a {
+                color: #fff;
+                text-decoration: none;
+            }
+
+            iron-pages {
+                padding: 1rem;
+            }
         </style>
 
         <app-location
@@ -101,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <app-header slot="header" condenses reveals effects="waterfall">
                     <app-toolbar>
                         <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-                        <div main-title>Storms</div>
+                        <div main-title><a href="/">Storms</a></div>
                         <paper-button on-click="login">Login</paper-button>
                     </app-toolbar>
                 </app-header>
@@ -111,10 +120,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         attr-for-selected="name"
                         fallback-selection="view404"
                         role="main">
-                    <page-home name="page-home" user-id="[[userId]]"></page-home>
                     <my-list name="list" route="[[subroute]]" user-id="[[userId]]"></my-list>
                     <my-lists name="lists" route="[[subroute]]" user-id="[[userId]]"></my-lists>
                     <my-view404 name="view404"></my-view404>
+                    [[data]]Here
                 </iron-pages>
             </app-header-layout>
         </app-drawer-layout>
@@ -125,6 +134,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 storage-bucket="brainstorm-639e3.appspot.com"
                 messaging-sender-id="830974264266">
         </firebase-app>
+        <firebase-query
+                path="/users/0/lists/0/"
+                data="{{data}}" log>
+        </firebase-query>
+        [[data]]Here
         <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError"></firebase-auth>
     </template>
 
@@ -165,14 +179,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             connectedCallback() {
                 super.connectedCallback();
-                this.userId = this.$.auth.user.uid;
+                /*
+                this.$.auth.signInAnonymously()
+                    .then(function(response) {
+                        console.log("Signed in anonymously!");
+                        console.log(this.$.auth.user);
+                        this.userId = this.$.auth.user.uid;
+                    }.bind(this))
+                    .catch(function(error) {});
+                */
+                //this.userId = this.$.auth.user.uid;
                 // this.login();
+            }
+
+            handleError(error) {
+                console.log(error);
             }
 
             _routePageChanged(page) {
                 // If no page was found in the route data, page will be an empty string.
                 // Default to 'view1' in that case.
-                this.page = page || 'page-home';
+                this.page = page || 'lists';
 
                 // Close a non-persistent drawer when the page & route are changed.
                 if(!this.$.drawer.persistent) {
@@ -197,12 +224,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             login() {
                 this.$.auth.signInWithPopup()
-                    .then(function(response) {
+                    .then(function (response) {
                         console.log(this.$.auth.user);
-                        console.log("Here");
+                        console.log("Signed in!");
                         this.userId = this.$.auth.user.uid;
                     }.bind(this))
-                    .catch(function(error) {});
+                    .catch(function (error) {
+                    });
             }
         }
 

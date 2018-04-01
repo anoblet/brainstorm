@@ -2,11 +2,8 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
-    "src/page-home.html",
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html"
+    "src/my-lists.html",
+    "src/my-list.html"
   ],
   "sources": [
     "images/**/*",
@@ -18,7 +15,9 @@
     "manifest.json"
   ],
   "lint": {
-    "rules": ["polymer-2"]
+    "rules": [
+      "polymer-2"
+    ]
   },
   "builds": [
     {
@@ -29,6 +28,19 @@
     },
     {
       "preset": "es6-unbundled"
+    },
+    {
+      "name": "custom-bundled",
+      "bundle": true,
+      "js": {
+        "minify": false
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      }
     }
   ]
 }

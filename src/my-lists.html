@@ -34,22 +34,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 grid-template-columns: auto max-content;
             }
         </style>
-        <paper-card heading="My Storms">
-            <paper-listbox selected="{{listId}}">
-                <template is="dom-repeat" items="{{lists}}">
-                    <paper-item>
-                        <a href="/list/[[index]]">
-                            <div class="label">
-                                [[index]][[item.label]]
+        <paper-card heading="Storms">
+            <div class="content">
+                <paper-listbox selected="{{listId}}">
+                    <template is="dom-repeat" items="{{lists}}">
+                        <paper-item>
+                            <a href="/list/[[index]]">
+                                <div class="label">
+                                    [[index]][[item.label]]
+                                </div>
+                            </a>
+                            <div class="actions">
+                                <iron-icon icon="icons:create"></iron-icon>
+                                <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
                             </div>
-                        </a>
-                        <div class="actions">
-                            <iron-icon icon="icons:create"></iron-icon>
-                            <iron-icon icon="icons:clear" data-id$="[[index]]" on-click="_delete"></iron-icon>
-                        </div>
-                    </paper-item>
-                </template>
-            </paper-listbox>
+                        </paper-item>
+                    </template>
+                </paper-listbox>
+            </div>
             <div class="card-actions">
                 <paper-button on-click="_new">New</paper-button>
             </div>
