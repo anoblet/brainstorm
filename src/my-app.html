@@ -114,17 +114,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-button on-click="login">Login</paper-button>
                     </app-toolbar>
                 </app-header>
-
-                <iron-pages
-                        selected="[[page]]"
-                        attr-for-selected="name"
-                        fallback-selection="view404"
-                        role="main">
-                    <my-list name="list" route="[[subroute]]" user-id="[[userId]]"></my-list>
-                    <my-lists name="lists" route="[[subroute]]" user-id="[[userId]]"></my-lists>
-                    <my-view404 name="view404"></my-view404>
-                    [[data]]Here
-                </iron-pages>
+                <template is="dom-if" if="[[user]]">
+                    <iron-pages
+                            selected="[[page]]"
+                            attr-for-selected="name"
+                            fallback-selection="view404"
+                            role="main">
+                        <my-list name="list" route="[[subroute]]" user-id="[[user.uid]]"></my-list>
+                        <my-lists name="lists" route="[[subroute]]" user-id="[[user.uid]]"></my-lists>
+                        <my-view404 name="view404"></my-view404>
+                    </iron-pages>
+                </template>
             </app-header-layout>
         </app-drawer-layout>
         <firebase-app
@@ -138,8 +138,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 path="/users/0/lists/0/"
                 data="{{data}}" log>
         </firebase-query>
-        [[data]]Here
-        <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError"></firebase-auth>
+        <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
     </template>
 
     <script>
@@ -164,6 +163,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     // This shouldn't be neccessary, but the Analyzer isn't picking up
                     // Polymer.Element#rootPath
                     rootPath: String,
+                    statusKnown: {
+                        type: Boolean,
+                        observer: '_statusKnownChanged'
+                    },
                     userId: {
                         type: String,
                         value: "0"
@@ -179,21 +182,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             connectedCallback() {
                 super.connectedCallback();
-                /*
-                this.$.auth.signInAnonymously()
-                    .then(function(response) {
-                        console.log("Signed in anonymously!");
-                        console.log(this.$.auth.user);
-                        this.userId = this.$.auth.user.uid;
-                    }.bind(this))
-                    .catch(function(error) {});
-                */
-                //this.userId = this.$.auth.user.uid;
-                // this.login();
             }
 
             handleError(error) {
                 console.log(error);
+            }
+
+            _statusKnownChanged(status) {
+                if(status) {
+                    if(!this.$.auth.user) {
+                        this.login();
+                    }
+                }
             }
 
             _routePageChanged(page) {
@@ -225,10 +225,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             login() {
                 this.$.auth.signInWithPopup()
                     .then(function (response) {
-                        console.log(this.$.auth.user);
-                        console.log("Signed in!");
-                        this.userId = this.$.auth.user.uid;
-                    }.bind(this))
+                    })
                     .catch(function (error) {
                     });
             }
