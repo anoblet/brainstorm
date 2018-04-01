@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="my-lists">
     <template>
-        <app-route route="{{route}}" pattern="/:list" data="{{routeData}}"></app-route>
+        <app-route route="{{route}}" pattern="/:listId" data="{{routeData}}"></app-route>
         <style include="my-styles"></style>
         <style>
             :host {
@@ -78,24 +78,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     data: {
                         type: Object,
                     },
-                    list: {},
                     lists: {
                         type: Array,
-                        //observer: '_listsChanged'
-                        // computed: '_computeLists(data)'
                     },
                     userId: {
                         type: String
                     },
                     listId: {
                         type: Number,
-                        notify: true
                     },
                     route: {},
-                    version: {
-                        type: Number,
-                        value: 1
-                    }
                 }
             }
 
