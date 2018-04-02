@@ -111,7 +111,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <app-toolbar>
                         <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
                         <div main-title><a href="/">Brainstorm</a></div>
-                        <paper-button on-click="login">Login</paper-button>
+                        <template is="dom-if" if="[[signedIn]]">
+                            <paper-button on-click="login">Logout</paper-button>
+                        </template>
+                        <template is="dom-if" if="[[!signedIn]]">
+                            <paper-button on-click="login">Login</paper-button>
+                        </template>
                     </app-toolbar>
                 </app-header>
                 <template is="dom-if" if="[[user]]">
@@ -138,7 +143,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 path="/users/0/lists/0/"
                 data="{{data}}" log>
         </firebase-query>
-        <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
+        <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError" signed-in="{{signedIn}}" status-known="{{statusKnown}}"></firebase-auth>
     </template>
 
     <script>
@@ -188,8 +193,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 console.log(error);
             }
 
-            _statusKnownChanged(status) {
-                if(status) {
+            _statusKnownChanged(statusKnown) {
+                if(statusKnown) {
                     if(!this.$.auth.user) {
                         this.login();
                     }
