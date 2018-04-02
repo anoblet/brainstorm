@@ -112,7 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
                         <div main-title><a href="/">Brainstorm</a></div>
                         <template is="dom-if" if="[[signedIn]]">
-                            <paper-button on-click="login">Logout</paper-button>
+                            <paper-button on-click="logout">Logout</paper-button>
                         </template>
                         <template is="dom-if" if="[[!signedIn]]">
                             <paper-button on-click="login">Login</paper-button>
@@ -229,6 +229,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             login() {
                 this.$.auth.signInWithPopup()
+                    .then(function (response) {
+                    })
+                    .catch(function (error) {
+                    });
+            }
+
+            logout() {
+                this.$.auth.signOut()
                     .then(function (response) {
                     })
                     .catch(function (error) {
