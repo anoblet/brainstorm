@@ -110,10 +110,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             _addItem(item) {
-                // Check if the list has been set
-                this.data.items = this.data.items || [];
                 // Check if item is an empty value
                 if(!this.item) return;
+
+                // Check if the list has been set
+                this.data.items = this.data.items || [];
 
                 this.push("data.items", this.item);
                 this.item = undefined;
