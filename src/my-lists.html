@@ -35,6 +35,11 @@
             paper-item:hover .actions {
                 display: block
             }
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
         </style>
         <paper-card heading="Storms">
             <div class="content">
@@ -44,7 +49,7 @@
                         <paper-item>
                             <a href="/list/[[index]]">
                                 <div class="label">
-                                    [[index]][[item.label]]
+                                    [[index]]. [[item.label]]
                                 </div>
                             </a>
                             <div class="actions">

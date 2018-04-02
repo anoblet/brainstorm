@@ -37,6 +37,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </template>
                 </paper-listbox>
             </div>
+            <div class="card-actions">
+                <paper-input label="Label" value="{{data.label}}" always-float-label></paper-input>
+            </div>
         </paper-card>
         <firebase-document path="/users/[[userId]]/lists/[[id]]" data="{{data}}"></firebase-document>
     </template>
