@@ -22,7 +22,8 @@
     "paper-item": "PolymerElements/paper-item#^2.1.0",
     "polymerfire": "firebase/polymerfire#^2.2.1",
     "paper-button": "PolymerElements/paper-button#^2.1.0",
-    "paper-card": "PolymerElements/paper-card#^2.1.0"
+    "paper-card": "PolymerElements/paper-card#^2.1.0",
+    "MyHelpers": "https://github.com/anoblet/MyHelpers.git"
   },
   "resolutions": {
     "polymer": "^2.0.0"

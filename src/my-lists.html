@@ -49,7 +49,7 @@
                         <paper-item>
                             <a href="/list/[[index]]">
                                 <div class="label">
-                                    [[index]]. [[item.label]]
+                                    [[_add(index, 1)]]. [[item.label]]
                                 </div>
                             </a>
                             <div class="actions">
@@ -130,8 +130,8 @@
 
             // Helpers
 
-            _computeIndex(index) {
-                return index + 1;
+            _add(integer, amount) {
+                return integer + amount;
             }
         }
 

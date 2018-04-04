@@ -16,7 +16,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
-
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/MyHelpers/MyHelpers.html">
 <link rel="import" href="my-styles.html">
 
 <dom-module id="my-list">
@@ -26,6 +29,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             :host {
                 display: block;
             }
+
+            paper-item {
+                display: grid;
+                grid-template-columns: auto max-content;
+            }
+
+            paper-item .actions {
+                display: none;
+            }
+
+            paper-item:hover .actions {
+                display: block
+            }
         </style>
         <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_addItem"></iron-a11y-keys>
         <paper-card>
@@ -33,7 +49,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input id="item" label="Write your ideas here..." value="{{item::input}}" always-float-label></paper-input>
                 <paper-listbox>
                     <template is="dom-repeat" items="{{data.items}}">
-                        <paper-item>[[_computeIndex(index)]]. [[item]]</paper-item>
+                        <paper-item>
+                            <div class="label">
+                                [[_add(index, 1)]]. [[item]]
+                            </div>
+                            <div class="actions">
+                                <paper-icon-button icon="icons:clear" data-id$="[[index]]" on-tap="deleteList"></paper-icon-button>
+                            </div>
+                        </paper-item>
                     </template>
                 </paper-listbox>
             </div>
@@ -45,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
 
     <script>
-        class MyList extends Polymer.Element {
+        class MyList extends MyHelpers(Polymer.Element) {
             static get is() {
                 return 'my-list';
             }
