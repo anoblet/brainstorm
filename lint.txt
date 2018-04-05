@@ -1,1 +1,53 @@
-Terminate batch job (Y/N)? 
+
+
+[object Object]
+
+                data="{{data}}" log>
+                        ~~~~
+
+src/my-app.html(135,24) warning [databind-with-unknown-property] - data is not declared or used more than once. Did you mean: __data
+
+
+                        <my-list name="list" route="[[subroute]]" user-id="[[user.uid]]"></my-list>
+                                             ~~~~~
+
+src/my-app.html(119,45) warning [set-unknown-attribute] - my-list elements do not have a property named route. Consider instead:  role$
+
+
+                        <my-view404 name="view404"></my-view404>
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/my-app.html(121,24) warning [undefined-elements] - The element my-view404 is not defined
+
+
+        <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
+                            ~~~~~
+
+src/my-list.html(26,28) warning [databind-with-unknown-property] - route is not declared or used more than once. Did you mean: item
+
+
+        <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_addItem"></iron-a11y-keys>
+                                            ~~~~~~
+
+src/my-list.html(45,44) warning [databind-with-unknown-property] - target is not declared or used more than once. Did you mean: label
+
+
+                                [[_add(index, 1)]]. [[item]]
+                                 ~~~~
+
+src/my-list.html(53,33) warning [databind-with-unknown-property] - _add is not declared or used more than once. Did you mean: id
+
+
+                                [[_add(index, 1)]]. [[item]]
+                                 ~~~~
+
+src/my-list.html(53,33) warning [databinding-calls-must-be-functions] - _add is not a known method on my-list
+
+
+        <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/my-list.html(26,8) warning [undefined-elements] - The element app-route is not defined
+
+
+Found 1 error 8 warnings.
