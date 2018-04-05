@@ -116,10 +116,12 @@
             // Actions
 
             createList() {
-                let length = this.lists.length;
-                if(length == undefined) length = 0;
+                // Document has reverted to an object, reset it to an array
                 if(!Array.isArray(this.document)) this.set("document", []);
-                window.history.pushState({}, null, '/list/' + length);
+                // Check how many lists we have
+                let listId = this.lists.length;
+                // Redirect
+                window.history.pushState({}, null, '/list/' + listId);
                 window.dispatchEvent(new CustomEvent('location-changed'));
             }
 

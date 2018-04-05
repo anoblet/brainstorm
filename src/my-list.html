@@ -54,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 [[_add(index, 1)]]. [[item]]
                             </div>
                             <div class="actions">
-                                <paper-icon-button icon="icons:clear" data-id$="[[index]]" on-tap="deleteList"></paper-icon-button>
+                                <paper-icon-button icon="icons:clear" data-id$="[[index]]" on-tap="deleteItem"></paper-icon-button>
                             </div>
                         </paper-item>
                     </template>
@@ -144,6 +144,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 // Clear the input
                 this.item = undefined;
+            }
+
+            deleteItem(event) {
+                let id = event.target.getAttribute('data-id');
+                console.log(this.data);
+                this.splice("data.items", id, 1);
             }
 
             _computeData(id, items) {
